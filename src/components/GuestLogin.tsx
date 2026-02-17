@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getGuestId } from '@/lib/auth';
+import AvatarSelector from '@/components/AvatarSelector';
 
 export default function GuestLogin() {
   const [guestId, setGuestId] = useState<string>('');
@@ -18,8 +19,13 @@ export default function GuestLogin() {
     <div className="p-4 border rounded shadow-md">
       <h2 className="text-xl font-medium">Join as Guest</h2>
       <p className="text-gray-600 mb-4">Your Guest ID: {guestId}</p>
+
+      <div className="mb-6">
+        <AvatarSelector />
+      </div>
+
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
         onClick={() => {
           // Force valid navigation in Next.js app router
           window.location.href = '/town';

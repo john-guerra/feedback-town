@@ -2,18 +2,20 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { getGuestId } from '@/lib/auth';
+import { getGuestId, getAvatarColor } from '@/lib/auth';
 
 type UserPresence = {
   user_id: string;
   x: number;
   y: number;
+  color: string;
   online_at: string;
 };
 
 export default function TownCanvas() {
   const [users, setUsers] = useState<UserPresence[]>([]);
   const guestId = getGuestId();
+  const [myColor, setMyColor] = useState<string>('bg-blue-500');
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   // Local state for smooth optimistic updates
@@ -21,6 +23,11 @@ export default function TownCanvas() {
 
   useEffect(() => {
     if (!guestId) return;
+
+    // Get saved color
+    const savedColor = getAvatarColor();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMyColor(savedColor);
 
     const channel = supabase.channel('town:main');
     channelRef.current = channel;
@@ -44,6 +51,7 @@ export default function TownCanvas() {
             user_id: guestId,
             x: 50, // Default start
             y: 50,
+            color: savedColor,
             online_at: new Date().toISOString(),
           });
         }
@@ -68,6 +76,7 @@ export default function TownCanvas() {
       user_id: guestId,
       x,
       y,
+      color: myColor,
       online_at: new Date().toISOString(),
     });
   };
@@ -102,7 +111,7 @@ export default function TownCanvas() {
             }}
           >
             <div
-              className={`w-8 h-8 rounded-full shadow-lg border-2 ${user.user_id === guestId ? 'bg-blue-500 border-white' : 'bg-orange-400 border-white'}`}
+              className={`w-8 h-8 rounded-full shadow-lg border-2 border-white ${user.user_id === guestId ? myColor : user.color || 'bg-gray-400'}`}
             ></div>
             <span className="text-xs bg-white/80 px-1 rounded mt-1 shadow-sm font-mono">
               {user.user_id.slice(0, 4)}

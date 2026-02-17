@@ -32,6 +32,8 @@ vi.mock('@supabase/supabase-js', () => ({
 // Mock getGuestId to return a stable ID
 vi.mock('@/lib/auth', () => ({
   getGuestId: vi.fn().mockReturnValue('test-guest-id'),
+  getAvatarColor: vi.fn().mockReturnValue('bg-blue-500'),
+  setAvatarColor: vi.fn(),
 }));
 
 describe('TownCanvas', () => {
@@ -71,6 +73,7 @@ describe('TownCanvas', () => {
           user_id: 'test-guest-id',
           x: 50,
           y: 50,
+          color: 'bg-blue-500', // Default mock color
         })
       );
     });
