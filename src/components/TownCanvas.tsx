@@ -21,6 +21,12 @@ export default function TownCanvas() {
 
   // Local state for smooth optimistic updates
   const [myPosition, setMyPosition] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
+  const [townMode, setTownMode] = useState<string>('IDLE');
+
+  useEffect(() => {
+    // Determine user's zone based on position and mode for analytics
+    // (This is just visual logic for now, syncing vote logic requires backend or complex presence payload)
+  }, [myPosition, townMode]);
 
   useEffect(() => {
     if (!guestId) return;
@@ -69,6 +75,27 @@ export default function TownCanvas() {
             online_at: new Date().toISOString(),
           });
         }
+      });
+
+    // Subscribe to DB changes for town_config
+    const configChannel = supabase
+      .channel('town_config_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'town_config' }, (payload) => {
+        // payload.new is the new row
+        const newRow = payload.new as { active_mode: string };
+        if (newRow && newRow.active_mode) {
+          setTownMode(newRow.active_mode);
+        }
+      })
+      .subscribe();
+
+    // Initial fetch to get current state
+    supabase
+      .from('town_config')
+      .select('active_mode')
+      .single()
+      .then(({ data }) => {
+        if (data) setTownMode(data.active_mode);
       });
 
     return () => {
@@ -143,6 +170,34 @@ export default function TownCanvas() {
             <div className="absolute bottom-6 w-8 h-8 bg-green-500 rounded-full left-1/2 -translate-x-1/2 opacity-80"></div>
           </div>
         ))}
+
+        {/* Question Mode Highlighting */}
+        {townMode === 'YES_NO' && (
+          <div className="absolute inset-0 pointer-events-none flex opacity-20">
+            <div className="w-1/2 h-full bg-green-500 flex items-center justify-center">
+              <span className="text-9xl font-bold text-green-900 opacity-50">YES</span>
+            </div>
+            <div className="w-1/2 h-full bg-red-500 flex items-center justify-center">
+              <span className="text-9xl font-bold text-red-900 opacity-50">NO</span>
+            </div>
+          </div>
+        )}
+        {townMode === 'ABCD' && (
+          <div className="absolute inset-0 pointer-events-none flex flex-wrap opacity-20">
+            <div className="w-1/2 h-1/2 bg-blue-500 flex items-center justify-center border-r border-b border-white/50">
+              <span className="text-6xl font-bold text-blue-900 opacity-50">A</span>
+            </div>
+            <div className="w-1/2 h-1/2 bg-yellow-500 flex items-center justify-center border-b border-white/50">
+              <span className="text-6xl font-bold text-yellow-900 opacity-50">B</span>
+            </div>
+            <div className="w-1/2 h-1/2 bg-purple-500 flex items-center justify-center border-r border-white/50">
+              <span className="text-6xl font-bold text-purple-900 opacity-50">C</span>
+            </div>
+            <div className="w-1/2 h-1/2 bg-orange-500 flex items-center justify-center">
+              <span className="text-6xl font-bold text-orange-900 opacity-50">D</span>
+            </div>
+          </div>
+        )}
 
         {users.map((user) => (
           <div
