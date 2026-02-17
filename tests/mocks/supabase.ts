@@ -7,7 +7,9 @@ export const supabase = {
   update: vi.fn().mockReturnThis(),
   delete: vi.fn().mockReturnThis(),
   auth: {
-    signInWithPassword: vi.fn(),
+    signInWithPassword: vi
+      .fn()
+      .mockResolvedValue({ data: { user: { id: 'test-user' } }, error: null }),
     signOut: vi.fn(),
   },
 };

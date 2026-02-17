@@ -8,6 +8,7 @@ export default function GuestLogin() {
 
   useEffect(() => {
     // We only run this on the client
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setGuestId(getGuestId());
   }, []);
 
