@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { getGuestId, getAvatarColor } from '@/lib/auth';
+import Avatar from './Avatar';
 
 type UserPresence = {
   user_id: string;
@@ -105,28 +106,60 @@ export default function TownCanvas() {
         className="relative w-full max-w-4xl h-[600px] bg-emerald-100 rounded-xl shadow-inner border-2 border-emerald-300 overflow-hidden cursor-pointer"
         onClick={handleCanvasClick}
       >
-        {/* Grid Pattern Background */}
+        {/* Grass Background */}
         <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
+          className="absolute inset-0 opacity-40 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(#065f46 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
+            backgroundColor: '#e6fffa',
+            backgroundImage: `
+              radial-gradient(#4d7c0f 2px, transparent 2px),
+              radial-gradient(#365314 1px, transparent 1px)
+            `,
+            backgroundSize: '30px 30px, 10px 10px',
+            backgroundPosition: '0 0, 15px 15px',
           }}
         ></div>
+
+        {/* Central Fountain */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 pointer-events-none">
+          <div className="absolute inset-0 bg-blue-300 rounded-full opacity-50 animate-pulse"></div>
+          <div className="absolute inset-2 bg-blue-400 rounded-full border-4 border-stone-300 flex items-center justify-center shadow-lg">
+            <div className="w-4 h-4 bg-blue-100 rounded-full animate-ping"></div>
+          </div>
+        </div>
+
+        {/* Decor: Trees (Static for now) */}
+        {[
+          { top: '10%', left: '10%' },
+          { top: '10%', left: '80%' },
+          { top: '80%', left: '15%' },
+          { top: '75%', left: '85%' },
+          { top: '40%', left: '5%' },
+          { top: '40%', left: '90%' },
+        ].map((pos, i) => (
+          <div key={i} className="absolute w-12 h-12 pointer-events-none" style={pos}>
+            <div className="absolute bottom-0 w-2 h-4 bg-yellow-900 left-1/2 -translate-x-1/2"></div>
+            <div className="absolute bottom-3 w-10 h-10 bg-green-600 rounded-full left-1/2 -translate-x-1/2 shadow-sm"></div>
+            <div className="absolute bottom-6 w-8 h-8 bg-green-500 rounded-full left-1/2 -translate-x-1/2 opacity-80"></div>
+          </div>
+        ))}
 
         {users.map((user) => (
           <div
             key={user.user_id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out flex flex-col items-center"
+            className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out flex flex-col items-center pointer-events-none" // added pointer-events-none to prevent blocking clicks
             style={{
               left: `${user.user_id === guestId ? myPosition.x : user.x}%`,
               top: `${user.user_id === guestId ? myPosition.y : user.y}%`,
+              zIndex: Math.floor(user.user_id === guestId ? myPosition.y : user.y), // Simple depth sorting
             }}
           >
-            <div
-              className={`w-8 h-8 rounded-full shadow-lg border-2 border-white ${user.user_id === guestId ? myColor : user.color || 'bg-gray-400'}`}
-            ></div>
-            <span className="text-xs bg-white/80 px-1 rounded mt-1 shadow-sm font-mono">
+            <Avatar
+              color={user.user_id === guestId ? myColor : user.color || 'bg-gray-400'}
+              isMe={user.user_id === guestId}
+            />
+
+            <span className="text-xs bg-white/90 px-2 py-0.5 rounded-full mt-1 shadow-sm font-bold border border-gray-200 text-gray-700">
               {user.user_id.slice(0, 4)}
             </span>
           </div>

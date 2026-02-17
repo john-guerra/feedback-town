@@ -48,7 +48,7 @@ describe('TeacherDashboard', () => {
     }
 
     await waitFor(() => {
-        expect(screen.getByText('2')).toBeInTheDocument();
+      expect(screen.getByText('2')).toBeInTheDocument();
     });
   });
 
