@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import AvatarSelector from './AvatarSelector';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, type Mock } from 'vitest';
 import * as auth from '@/lib/auth';
 
 // Mock auth functions
@@ -12,7 +12,7 @@ vi.mock('@/lib/auth', () => ({
 describe('AvatarSelector', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (auth.getAvatarColor as any).mockReturnValue('bg-blue-500');
+    (auth.getAvatarColor as Mock).mockReturnValue('bg-blue-500');
   });
 
   it('renders all color options', () => {
@@ -32,9 +32,9 @@ describe('AvatarSelector', () => {
   it('updates selection and calls setAvatarColor on click', () => {
     render(<AvatarSelector />);
     const redButton = screen.getByTitle('Red');
-    
+
     fireEvent.click(redButton);
-    
+
     expect(auth.setAvatarColor).toHaveBeenCalledWith('bg-red-500');
     expect(redButton).toHaveClass('border-black');
   });
@@ -42,10 +42,10 @@ describe('AvatarSelector', () => {
   it('calls onSelect prop when provided', () => {
     const onSelect = vi.fn();
     render(<AvatarSelector onSelect={onSelect} />);
-    
+
     const greenButton = screen.getByTitle('Green');
     fireEvent.click(greenButton);
-    
+
     expect(onSelect).toHaveBeenCalledWith('bg-green-500');
   });
 });

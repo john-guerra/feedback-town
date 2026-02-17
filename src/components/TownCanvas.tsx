@@ -34,16 +34,17 @@ export default function TownCanvas() {
 
     channel
       .on('presence', { event: 'sync' }, () => {
-        const newState = channel.presenceState<UserPresence>();
-        const allUsers: UserPresence[] = [];
-        for (const id in newState) {
-          // Use the latest presence state
-          const presence = newState[id][0];
+        const currentPresence = channel.presenceState<UserPresence>();
+        const uniqueUsers = new Map<string, UserPresence>();
+
+        for (const id in currentPresence) {
+          const presence = currentPresence[id][0];
           if (presence) {
-            allUsers.push(presence);
+            // Deduplicate by user_id (handle multiple tabs/connections for same user)
+            uniqueUsers.set(presence.user_id, presence);
           }
         }
-        setUsers(allUsers);
+        setUsers(Array.from(uniqueUsers.values()));
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {

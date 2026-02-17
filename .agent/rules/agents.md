@@ -49,6 +49,11 @@ Feedback Town is a Next.js application designed to facilitate feedback, likely f
   - _Note_: `window.location.href` is occasionally used for hard redirects where necessary (e.g., in `GuestLogin.tsx`).
 - **Linting**: Ensure code passes ESLint and Prettier checks before committing.
   - Rules are defined in `eslint.config.mjs` and `.prettierrc`.
+- **Testing**: Every feature implemented should be properly tested using automated tests. Use playwright for e2e testing.
+- **Commit Regularly**: And use github issues as your tasks when implementing new features. Make sure to close them once you complete them and keep track of which tests covers them.
+- **No errors**: Make sure no errors exist in the tests or the next.js console before claiming anything is complete.
+- **Review**: After completing a major milestone run a review pass role playing as a professional full stack developer.
+- **Security**: Make sure the application is secure and not private information is unsafe
 
 ## Knowledge & Context
 

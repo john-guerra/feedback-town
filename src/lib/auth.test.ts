@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getGuestId } from './auth';
+import { getGuestId, getAvatarColor, setAvatarColor } from './auth';
 
 describe('Guest Auth', () => {
   beforeEach(() => {
@@ -22,11 +22,7 @@ describe('Guest Auth', () => {
     const id = getGuestId();
     expect(id).toBe(existingId);
   });
-});
 
-import { getAvatarColor, setAvatarColor } from './auth';
-
-describe('Avatar Auth', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
