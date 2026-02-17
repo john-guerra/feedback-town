@@ -16,6 +16,11 @@ test('guest can join the town', async ({ page }) => {
   const guestId = await page.evaluate(() => localStorage.getItem('guest_id'));
   expect(guestId).toBeTruthy();
 
+  // Select an Avatar (Red)
+  const redButton = page.getByRole('button', { name: 'Select Red' });
+  await expect(redButton).toBeVisible();
+  await redButton.click();
+
   // Click join (currently alerts, so we handle dialog)
   page.on('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: 'Enter Town' }).click();

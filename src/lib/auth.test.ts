@@ -23,3 +23,23 @@ describe('Guest Auth', () => {
     expect(id).toBe(existingId);
   });
 });
+
+import { getAvatarColor, setAvatarColor } from './auth';
+
+describe('Avatar Auth', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.clearAllMocks();
+  });
+
+  it('gets default color if none exists', () => {
+    const color = getAvatarColor();
+    expect(color).toBe('bg-blue-500');
+  });
+
+  it('sets and gets avatar color', () => {
+    setAvatarColor('bg-red-500');
+    expect(getAvatarColor()).toBe('bg-red-500');
+    expect(localStorage.getItem('avatar_color')).toBe('bg-red-500');
+  });
+});
