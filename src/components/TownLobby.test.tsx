@@ -2,7 +2,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import TownLobby from './TownLobby';
 import { supabase } from '@/lib/supabase';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getGuestId } from '@/lib/auth';
 
 const { mockSupabase } = vi.hoisted(() => {
   const mockPresenceState = {

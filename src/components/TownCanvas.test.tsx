@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import TownCanvas from './TownCanvas';
 import { supabase } from '@/lib/supabase';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
