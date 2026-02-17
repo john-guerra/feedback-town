@@ -46,6 +46,18 @@ export default function TownCanvas() {
         }
         setUsers(Array.from(uniqueUsers.values()));
       })
+      .on('broadcast', { event: 'mayor_message' }, (payload) => {
+        // payload: { event: 'mayor_message', type: 'broadcast', payload: { message: '...' } }
+        // The payload stricture from supabase-js might wrap it.
+        // Let's assume payload.payload.message or payload.message depending on how we sent it.
+        // The sender sent: { message: question } inside the payload argument of channel.send
+        // So here we receive { message: '...' } directly?
+        // Actually, let's log it to be safe or use a toast.
+        const message = payload.payload?.message || payload.message;
+        if (message) {
+          alert(`📢 Mayor says: ${message}`);
+        }
+      })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await channel.track({

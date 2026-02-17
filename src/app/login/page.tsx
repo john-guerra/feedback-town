@@ -23,8 +23,8 @@ export default function LoginPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      // Redirect or update state (handled by layout/middleware usually)
-      window.location.href = '/dashboard';
+      // Redirect to teacher dashboard
+      window.location.href = '/teacher';
     }
   };
 
