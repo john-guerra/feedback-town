@@ -20,7 +20,10 @@ export default function GuestLogin() {
       <p className="text-gray-600 mb-4">Your Guest ID: {guestId}</p>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => alert(`Joined with ${guestId}`)}
+        onClick={() => {
+          // Force valid navigation in Next.js app router
+          window.location.href = '/town';
+        }}
       >
         Enter Town
       </button>
