@@ -55,7 +55,12 @@ Feedback Town is a Next.js application designed to facilitate feedback, likely f
 - **Review**: After completing a major milestone run a review pass role playing as a professional full stack developer.
 - **Security**: Make sure the application is secure and not private information is unsafe
 
+## Deployment
+
+- **Production URL**: [https://feedback-town.vercel.app/](https://feedback-town.vercel.app/)
+
 ## Knowledge & Context
 
+- **Testing Note**: When running `npm test` (Vitest), the process runs in watch mode. You may need to press `q` to quit the test runner if it hangs the process in some environment.
 - **Guest Access**: The app features a guest login system where users are assigned a Guest ID.
 - **Auth**: Custom auth logic seems to be located in `src/lib/auth`.
